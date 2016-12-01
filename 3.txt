@@ -1,12 +1,45 @@
-1. security
+1. security of WebRTC
+	media and data transfered are encrypted via AES
+		SRTP (secure RTP) for media
+		DTLS (datagram TLS) for data
+	so if you use HTTPS for signaling, your app will be secure
+		cuz others are already taken care by WebRTC
+	one things else
+		it became mandatory to use HTTPS if the page is using getUserMedia
+		cuz, otherwise, any unauthorized website can take medias via getUserMedia
 
+2. architechtures of WebRTC apps
+	peer-to-peer: one-on-one call
+	mesh: small N-way call
+	star: medium N-way call
+		maybe you can do things in the middle of the star, then deliver to others
+	MCU (multi-point control unit): large N-way call
+		surely you can do things in the MCU
 
-https://www.youtube.com/watch?v=5ci91dfKCyc
-https://www.youtube.com/watch?v=d7NsiFXcc5A
-https://www.youtube.com/watch?v=HCE3S1E5UwY
-https://www.youtube.com/watch?v=3TbVi9aB09k
-https://www.youtube.com/watch?v=nDPlGcoArdM
-https://www.youtube.com/watch?v=Muio-LPn7uo
+3. beyond-bowsers WebRTC
+	sipML5		open source JS SIP client
+	Phono		open source JS phone API
+	Zingaya		embeddable phone widget
 
+4. chrome://webrtc-internals
+	shows statisics about what's really happening in your call
 
+5. adapter.js
+	Lets you use the same code in all browsers:
+		Removes vendor prefixes
+		Abstracts Chrome/Firefox differences
+		Minimizes effects of spec churn
 
+6. frameworks for WebRTC
+	video chat
+		SimpleWebRTC
+		easyRTC
+		webRTC.io
+	peer-to-peer data
+		PeerJS
+		Sharefest
+	server
+		kurento		open source WebRTC media server
+
+7. an example of how to manipulate frames of the video stream
+	https://github.com/idevelop/ascii-camera

@@ -9,6 +9,9 @@
 			represents a stream of audio and/or video
 				can contain multiple 'tracks'
 
+			check supports
+				if(!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia))
+
 			obtain a MediaStream with navigator.getUserMedia()
 				var constraints = {video: true};	// controls the contents of the MediaStream
 
