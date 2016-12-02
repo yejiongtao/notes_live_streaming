@@ -1,5 +1,70 @@
-1. 
+1. latest level of support
+	http://caniuse.com
 
+2. general flow
+	connect users
+		e.g. two users enter the same room id
 
+	start signals
+		exchange signaling messages to negotiate the setup of their WebRTC connection
+		can use any form of communication, such as WebSocket
 
+	find candidates
+		using STUN, TURN, ICE to determine how they can be contacted
+
+	negotiate media sessions
+		agree on the type and format of media
+		using an offer/answer based model, built upon the Session Description Protocol (SDP)
+		defined as JavaScript Session Establishment Protocol (JSEP)
+
+	start RTCPeerConnection streams
+
+3. MediaStream API
+	MediaStream objects can be output in two key ways
+		be used to render into a MediaElement such as <video> or <audio>
+		be used to send to an RTCPeerConnection
+
+	MediaStream
+		a MediaStream object can fire a range of events such as addtrack, removetrack, or ended
+
+	MediaStreamTrack
+		can be represented in a number of states described by the MediaSourceStates object returned by the states() method
+		can also provide a range of capabilities, which can be accessed through the capabilities() method
+		a MediaStreamTrack can fire a range of events such as started, mute, unmute, overconstrainted, and ended
+
+4. RTCPeerConnection API
+	create
+		var peerConnection = RTCPeerConnection(conf);
+		conf contains at least one key named iceServers
+			which is an array of URL objects of STUN and possibly TURN servers
+
+	caller's flow
+		register the onicecandidate handler
+			to send any ICE candidates to the other peer
+			// an ICE candidate is a node on the way towards the remote peer, so you should send all the candidates you got to the remote peer
+
+		register the onaddstream handler
+			which displays the video stream once it's received from remote
+
+		register the message handler to the signaling channel
+			responds to messages received from the other peer
+			if the message contains an RTCIceCandidate object
+				it should add those to the peerconnection object using the addIceCandidate() method
+			if the message contains an RTCSessionDescription object
+				it should add those to the peerconnection object using the setRemoteDescription() method
+
+		use getUserMedia to access local camera
+			and add it to the peerconnection object using the addStream() method
+
+		the JSEP offer/answer process
+			start the negotiation using the createOffer() method
+			register a callback handler that receives an RTCSessionDescription object
+				which should add this RTCSessionDescription to your peerconnection object using setLocalDescription()
+				and should also send this RTCSessionDescription to the remote peer through your signaling channel
+		
+	callee's flow
+		similar to caller's flow, except that in the JSEP offer/answer process
+			pass the remoteDescription to the createAnswer() method
+
+5. 	
 
