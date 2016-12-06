@@ -1,0 +1,79 @@
+1. video options
+	-r[:steam_specifier] fps (input/output, per-stream)
+		set the frame rate
+	-s[:stream_specifier] size (input/output, per-stream)
+		set frame size
+	-aspect[:stream_specifier] aspect (output,per-stream)
+		Set the video display aspect ratio specified by aspect
+		1.777, 4:3
+
+	-vn (output)
+		Disable video recording
+	
+	-hwaccel[:stream_specifier] hwaccel (input,per-stream)
+		Use hardware acceleration to decode the matching stream(s)
+	...
+
+2. audio options
+	-ar[:stream_specifier] freq (input/output,per-stream)
+		Set the audio sampling frequency. 
+		For output streams it is set by default to the frequency of the corresponding input stream
+
+	-ac[:stream_specifier] channels (input/output,per-stream)
+		Set the number of audio channels
+		For output streams it is set by default to the number of input audio channels. 
+			For input streams this option only makes sense for audio grabbing devices and raw demuxers
+	
+	-an (output)
+		Disable audio recording
+	...
+
+3. subtitle options
+	-sn (output)
+		disable subtitle recording
+	
+	-canvas_size size
+		set the size of the canvas used to render subtitles
+	...
+
+4. advanced options
+	-map [-]input_file_id[:stream_specifier][,sync_file_id[:stream_specifier]] | [linklabel] (output)
+		Designate one or more input streams as a source for the output file
+		The first -map option on the command line specifies the source for output stream 0
+			the second -map option specifies the source for output stream 1, etc
+		e.g. 
+			ffmpeg -i INPUT -map 0 output
+				map all streams from the first input file to output
+			ffmpeg -i a.mov -i b.mov -c copy -map 0:2 -map 1:6 out.mov
+				copy stream 2 from a.mov and stream 6 from b.mov to out.mov
+
+	-map_channel [input_file_id.stream_specifier.channel_id|-1][:output_file_id.stream_specifier]
+		Map an audio channel from a given input to an output
+	
+	-benchmark (global)
+		Show benchmarking information at the end of an encode
+	-benchmark_all (global)
+		Shows CPU time used in various steps 
+
+	-filter_complex filtergraph (global)
+		e.g. overlay an image over video
+			ffmpeg -i video.mkv -i image.png -filter_complex '[0:v][1:v]overlay[out]' -map '[out]' out.mkv		// output link labels are referred to with -map
+	-filter_complex_script filename (global)
+
+5. preset files
+	contains a sequence of option=value pairs, one for each line, specifying a sequence of options which would be awkward to specify on the command line
+
+6. examples
+	video and audio grabbing
+		// If you specify the input format and device then ffmpeg can grab video and audio directly
+		ffmpeg -f oss -i /dev/dsp -f video4linux2 -i /dev/video0 /tmp/out.mpg
+		ffmpeg -f alsa -ac 1 -i hw:1 -f video4linux2 -i /dev/video0 /tmp/out.mpg
+	
+	X11 grabbing (screen recording)
+		ffmpeg -f x11grab -video_size cif -framerate 25 -i :0.0 /tmp/out.mpg
+		ffmpeg -f x11grab -video_size cif -framerate 25 -i :0.0+10,20 /tmp/out.mpg
+			// 0.0 is display.screen number of your X11 server, same as the DISPLAY environment variable
+			//  10 is the x-offset and 20 the y-offset for the grabbing
+	
+
+			
