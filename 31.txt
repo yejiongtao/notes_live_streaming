@@ -1,0 +1,8 @@
+1. workflow of my system
+	ffmpeg video grabbing -> Nginx rtmp live -> ffplay playing
+		ffmpeg -r 5 -f vfwcap -i 0 -s 176x144 -f flv rtmp://ip/live
+		ffplay -probesize 32 -sync ext rtmp://ip/live
+	WebRTC
+
+
+
